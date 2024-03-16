@@ -1,0 +1,105 @@
+class Score:
+    def __init__(self, math_score, phy_score, chem_score):
+        self.math_score = math_score
+        self.phy_score = phy_score
+        self.chem_score = chem_score
+
+    def get_total(self):
+        return self.math_score + self.phy_score + self.chem_score
+
+class Student:
+    def __init__(self, student_id, name, score):
+        self.id = student_id
+        self.name = name
+        self.score = score
+
+    def read_student():
+        student_id = int(input("Enter student ID: "))
+        name = input("Enter student name: ")
+        math_score = int(input("Enter Math score: "))
+        phy_score = int(input("Enter Physics score: "))
+        chem_score = int(input("Enter Chemistry score: "))
+        score = Score(math_score, phy_score, chem_score)
+
+        return Student(student_id, name, score)
+
+    # tells Python how to print objects of that class in a string format.
+    def __str__(self):
+        return f"{self.id}\t{self.name}\t{self.score.math_score}\t{self.score.phy_score}\t{self.score.chem_score}\t{self.score.get_total()}"
+
+def display_students(students):
+    print('-'*74)
+    print(f"{'ID':<4}{'Name':<10}{'Math':<8}{'Physics':<12}{'Chemistry':<12}{'Total':<12}")
+    print('-'*74)
+
+    for student in students:
+        print(f"{student.id:<4}{student.name:<10}{student.score.math_score:<8}{student.score.phy_score:<12}{student.score.chem_score:<12}{student.score.get_total():<12}")
+    print('-'*74)
+    
+students = []
+# students.append(Student(1, "Borom", Score(50, 30, 70)))
+# students.append(Student(2, "Rom on the max", Score(60, 40, 80)))
+# students.append(Student(3, "Rom Bok Kon Srey Ke", Score(70, 50, 90)))
+
+def add_student():
+    new_student = Student.read_student()
+    if any(s.id == new_student.id for s in students):
+        print(f"Student with ID {new_student.id} already exists.")
+    else:
+        students.append(new_student)
+        print("Student added successfully.")
+    # input("Enter to exit...")
+
+def delete_student_by_id(student_id):
+    global students
+    # if the id same it append if not pop 
+    new_students = [student for student in students if student.id != student_id]
+    if len(students) == len(new_students):
+        print(f"Student with ID {student_id} not found.")
+    else:
+        students = new_students
+        print(f"Student with ID {student_id} has been deleted successfully.")
+
+def search_student_by_id(student_id):
+    for student in students:
+        if student.id == student_id:
+
+            print("Student Information Found:")
+            print("-" * 40)
+            print(f"ID: {student.id}")
+            print(f"Name: {student.name}")
+            print(f"Math Score: {student.score.math_score}")
+            print(f"Physics Score: {student.score.phy_score}")
+            print(f"Chemistry Score: {student.score.chem_score}")
+            print(f"Total Score: {student.score.get_total()}")
+            print("-" * 40)
+            return
+    print("Search Not Found.")
+
+def menu():
+    while True:
+        print("\nMenu:")
+        print("1. Add a new student")
+        print("2. Delete student by ID")
+        print("3. Search student by ID")
+        print("4. Display all students")
+        print("5. Exit the program")
+        choice = input("Enter your choice (1-5): ")
+        
+        if choice == '1':
+            add_student()
+        elif choice == '2':
+            student_id = int(input("Enter the ID of the student to delete: "))
+            delete_student_by_id(student_id)
+        elif choice == '3':
+            student_id = int(input("Enter the ID of the student to search for: "))
+            search_student_by_id(student_id)
+        elif choice == '4':
+            display_students(students)
+        elif choice == '5':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 5.")
+
+menu()
